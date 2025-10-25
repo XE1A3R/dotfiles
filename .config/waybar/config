@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "tray", "network"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "network", "tray"],
     
     "keyboard": {
         "format": "{}",
