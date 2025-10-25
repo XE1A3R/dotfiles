@@ -1,0 +1,71 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 35,
+    "spacing": 4,
+    
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "tray"],
+    
+    "keyboard": {
+        "format": "{}",
+        "format-icons": ["󰌐", "󰌌"]
+    },
+    
+    "hyprland/window": {
+        "format": "{}",
+        "rewrite": {
+            "(.*) - Mozilla Firefox": "🌎 $1",
+            "(.*) - Discord": "💬 $1",
+            "(.*) - Spotify": "🎵 $1"
+        }
+    },
+    
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "󰈹",
+            "2": "󰊖", 
+            "3": "󰊌",
+            "4": "󰙯",
+            "5": "󰇮",
+            "active": "󰮯",
+            "default": "󰊠"
+        }
+    },
+    
+    "clock": {
+        "format": "{:%H:%M   %d/%m}",
+        "format-alt": "{:%A, %B %d, %Y}"
+    },
+    
+    "cpu": {
+        "format": "󰻠 {usage}%",
+        "tooltip": false
+    },
+    
+    "memory": {
+        "format": "󰍛 {}%"
+    },
+    
+    "disk": {
+        "format": "󰋊 {percentage_used}%",
+        "path": "/"
+    },
+    
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰖁",
+        "format-icons": ["󰕿", "󰖀", "󰕾"]
+    },
+    
+    "battery": {
+        "format": "{icon} {capacity}%",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+    
+    "tray": {
+        "spacing": 10
+    }
+}
