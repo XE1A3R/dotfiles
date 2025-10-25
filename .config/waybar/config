@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "tray"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "tray", "network"],
     
     "keyboard": {
         "format": "{}",
@@ -64,7 +64,19 @@
         "format": "{icon} {capacity}%",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
-    
+
+    "network": {
+        "interval": 5,
+        "format": "{ifname}",
+        "format-wifi": "󰖩 {essid} ({signalStrength}%)",
+        "format-ethernet": "󰈀 {ifname}",
+        "format-disconnected": "󰖪 Нет подключения",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
+        "tooltip-format-ethernet": "{ipaddr}/{cidr}",
+        "tooltip-format-disconnected": "Сеть отключена",
+        "on-click": "nm-connection-editor"
+    },
     "tray": {
         "spacing": 10
     }
