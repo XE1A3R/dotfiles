@@ -1,0 +1,44 @@
+# Основные настройки
+font=JetBrains Mono Nerd Font 11
+width=350
+height=130
+margin=20
+padding=12
+border-size=2
+border-radius=4
+
+# Цветовая схема как в Waybar
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#cba6f7
+progress-color=over #cba6f7
+
+# Позиция
+anchor=top-right
+
+# Время отображения
+default-timeout=10000
+
+# Группировка уведомлений
+group-by=summary
+
+# Формат уведомлений (ИСПРАВЛЕНО)
+format=<b>%s</b>\n%b
+
+# Настройки разметки
+#markup=yes
+#allow-markup=yes
+
+# Иконки
+icons=1
+max-icon-size=32
+
+[urgency=low]
+border-color=#45475a
+
+[urgency=high]
+border-color=#f38ba8
+
+[urgency=critical]
+border-color=#f38ba8
+background-color=#45171a
