@@ -8,6 +8,10 @@ export QT_STYLE_OVERRIDE=Fusion
 #export QT_QPA_PLATFORMTHEME=qt6ct
 export EDITOR=nvim
 export GPG_TTY=$(tty)
+export ZSH_COMPDUMP="/tmp/.zcompdump-$HOST"
+
+autoload -Uz compinit
+compinit -d ~/.zcompdump
 
 export ZSH_COMPDUMP="/tmp/.zcompdump-$HOST"
 
