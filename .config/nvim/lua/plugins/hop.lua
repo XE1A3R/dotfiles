@@ -1,0 +1,2 @@
+-- Hop configuration is handled in lua/core/plugins.lua
+-- This file exists to maintain the project structure
