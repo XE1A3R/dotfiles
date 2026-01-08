@@ -35,3 +35,8 @@ dotfiles checkout
 ## Внесение изменений
 
 При изменении конфигурационных файлов в домашней директории, вы можете добавить их к отслеживанию с помощью команды `dotfiles add`, затем создать коммит с описанием изменений и отправить их в удаленный репозиторий.
+
+<div align="center">
+  <a href="https://github.com/XE1A3R" alt="https://github.com/XE1A3R"><img src="https://img.shields.io/static/v1?style=for-the-badge&label=CREATED%20BY&message=XE1A3R&color=000000"></a>
+  <a href="https://github.com/XE1A3R/dotfiles/blob/master/LICENSE" alt="https://github.com/XE1A3R/dotfiles/blob/master/LICENSE"><img src="https://img.shields.io/static/v1?style=for-the-badge&label=LICENSE&message=MIT&color=000000"></a>
+</div>
