@@ -306,61 +306,150 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 [[ -f /home/sasha/.dart-cli-completion/zsh-config.zsh ]] && . /home/sasha/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
+# ===== Кастомное приглашение — минималистичное и информативное =====
 
-# ===== Кастомное приглашение (без системной статистики) =====
+# === Цветовая палитра (единая точка управления) ===
+typeset -gA PROMPT_COLORS
+PROMPT_COLORS=(
+  host        "%F{green}%B"      # хост
+  branch      "%F{magenta}"      # git-ветка
+  staged      "%F{yellow}"       # staged изменения
+  unstaged    "%F{red}"          # unstaged изменения
+  untracked   "%F{blue}"         # untracked файлы
+  venv        "%F{cyan}%B"       # виртуальное окружение
+  success     "%F{green}"        # статус 0
+  error       "%F{red}%B"        # статус ошибки
+  reset       "%b%f"             # сброс стилей
+)
 
-# Цвета
-fg_bold_green="%F{green}%B"
-fg_bold_yellow="%F{yellow}%B"
-fg_bold_cyan="%F{cyan}%B"
-fg_bold_red="%F{red}%B"
-reset_color="%b%f"
-
-# Глобальные переменные
-typeset -g CMD_START_TIME
-typeset -g CMD_EXEC_TIME
+# === Глобальные переменные (состояние между вызовами) ===
+typeset -g CMD_START_TIME=0
+typeset -g CMD_EXEC_TIME=0
 typeset -g LAST_PGP_CHECK=0
-typeset -g PGP_CACHE_AGE=30
-typeset -g PGP_UNLOCKED=0
+typeset -g LAST_DOCKER_CHECK=0
+typeset -g PGP_CACHE_AGE=5
+typeset -g DOCKER_CACHE_AGE=10
+typeset -g PGP_UNLOCKED=1
+typeset -g DOCKER_STATUS=""
 typeset -g RET_STATUS=0
 
-# === Надёжная проверка pass (через --pinentry-mode cancel) ===
-pgp_check() {
-  # Если нет хранилища — не показываем индикатор
-  [[ ! -d ~/.password-store ]] && return 1
-  
-  # Кэшируем результат на 5 секунд
-  (( EPOCHSECONDS - LAST_PGP_CHECK < PGP_CACHE_AGE )) && return $PGP_UNLOCKED
-  
-  # Находим первую запись в хранилище
-  local first_entry
-  first_entry=$(find ~/.password-store -name "*.gpg" -type f 2>/dev/null | head -n1)
-  
-  if [[ -n "$first_entry" ]]; then
-    # Проверяем расшифровку БЕЗ запроса пароля:
-    # --pinentry-mode cancel → немедленно отменить, если нужен пароль
-    # --batch --quiet → без интерактива и лишнего вывода
-    if gpg --pinentry-mode cancel --batch --quiet --decrypt "$first_entry" 2>/dev/null >/dev/null; then
-      PGP_UNLOCKED=0  # 0 = успех = РАЗБЛОКИРОВАНО
-    else
-      PGP_UNLOCKED=1  # 1 = ошибка = ЗАБЛОКИРОВАНО
-    fi
-  else
-    PGP_UNLOCKED=0  # пустое хранилище — считаем разблокированным
-  fi
-  
-  LAST_PGP_CHECK=$EPOCHSECONDS
-  return $PGP_UNLOCKED
+# === Индикаторы (каждый — независимая функция) ===
+
+# Toolbox/Podman контейнер
+_toolbox_prompt_info() {
+  [[ -n "$TOOLBOX_PATH" || -n "$container" ]] && echo "⬢ "
 }
 
+# SSH-сессия
+ssh_connection() {
+  [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && echo "🌐 "
+}
+
+# Git-репозиторий с цветными индикаторами состояния
+my_git_prompt() {
+  git rev-parse --git-dir >/dev/null 2>&1 || return
+  
+  local branch
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null || \
+           git describe --tags --exact-match 2>/dev/null || \
+           echo "(detached)")
+  
+  local indicators=()
+  
+  # Staged изменения (жёлтый)
+  git diff --cached --quiet 2>/dev/null || indicators+=("${PROMPT_COLORS[staged]}●${PROMPT_COLORS[reset]}")
+  
+  # Unstaged изменения (красный)
+  git diff --quiet 2>/dev/null || indicators+=("${PROMPT_COLORS[unstaged]}●${PROMPT_COLORS[reset]}")
+  
+  # Untracked файлы (синий)
+  git ls-files --others --exclude-standard --error-unmatch 2>/dev/null | grep -q . && \
+    indicators+=("${PROMPT_COLORS[untracked]}●${PROMPT_COLORS[reset]}")
+  
+  # Формируем вывод
+  if (( ${#indicators[@]} )); then
+    echo " ${PROMPT_COLORS[branch]}‹ ${branch} ${(j::)indicators} ›${PROMPT_COLORS[reset]}"
+  else
+    echo " ${PROMPT_COLORS[branch]}‹ ${branch} ›${PROMPT_COLORS[reset]}"
+  fi
+}
+
+# Время выполнения команды (>2 сек)
+exec_time_prompt() {
+  (( CMD_EXEC_TIME > 2000 )) || return
+  
+  local total_ms=$((CMD_EXEC_TIME))
+  local sec=$((total_ms / 1000))
+  
+  if (( sec < 10 )); then
+    echo " ⏱️ $(printf "%.2f" "$((total_ms))e-3")s"
+  else
+    local ms=$((total_ms % 1000))
+    echo " ⏱️ ${sec}s${ms}ms"
+  fi
+}
+
+# Виртуальное окружение (venv/conda)
+venv_prompt() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    echo " ${PROMPT_COLORS[venv]}(${VIRTUAL_ENV:t})${PROMPT_COLORS[reset]}"
+  elif [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+    echo " ${PROMPT_COLORS[venv]}(${CONDA_DEFAULT_ENV})${PROMPT_COLORS[reset]}"
+  fi
+}
+
+# Статус sudo (без пароля)
+sudo_prompt() {
+  sudo -n true 2>/dev/null && echo " 🔑"
+}
+
+# Статус GPG для pass (только если хранилище существует)
 pgp_prompt() {
-  # Показываем индикатор ТОЛЬКО если есть хранилище
   [[ -d ~/.password-store ]] || return
   
-  pgp_check && echo " 🔓"
+  # Кэшируем проверку
+  (( EPOCHSECONDS - LAST_PGP_CHECK < PGP_CACHE_AGE )) || {
+    local first_entry
+    first_entry=$(find ~/.password-store -name "*.gpg" -type f 2>/dev/null | head -n1)
+    
+    if [[ -n "$first_entry" ]]; then
+      gpg --pinentry-mode cancel --batch --quiet --decrypt "$first_entry" 2>/dev/null >/dev/null
+      PGP_UNLOCKED=$?
+    else
+      PGP_UNLOCKED=0  # пустое хранилище = разблокировано
+    fi
+    
+    LAST_PGP_CHECK=$EPOCHSECONDS
+  }
+  
+  # Показываем статус
+  (( PGP_UNLOCKED == 0 )) && echo " 🔓"
 }
 
-# === Основные функции ===
+# Статус Docker (количество запущенных контейнеров)
+docker_prompt() {
+  (( EPOCHSECONDS - LAST_DOCKER_CHECK < DOCKER_CACHE_AGE )) || {
+    if docker info --format '{{.ServerVersion}}' >/dev/null 2>&1; then
+      local running=$(docker ps -q 2>/dev/null | wc -l)
+      DOCKER_STATUS=$([[ $running -gt 0 ]] && echo " 🐳${running}" || echo " 🐳")
+    else
+      DOCKER_STATUS=""
+    fi
+    LAST_DOCKER_CHECK=$EPOCHSECONDS
+  }
+  
+  [[ -n "$DOCKER_STATUS" ]] && echo "$DOCKER_STATUS"
+}
+
+# Статус последней команды (цветной)
+ret_status() {
+  (( RET_STATUS == 0 )) && \
+    echo "${PROMPT_COLORS[success]}${RET_STATUS}${PROMPT_COLORS[reset]}" || \
+    echo "${PROMPT_COLORS[error]}${RET_STATUS}${PROMPT_COLORS[reset]}"
+}
+
+# === Хуки zsh (автоматические вызовы) ===
+
 preexec() {
   CMD_START_TIME=$EPOCHREALTIME
 }
@@ -377,72 +466,8 @@ precmd() {
   fi
 }
 
-_toolbox_prompt_info() {
-  [[ -n "$TOOLBOX_PATH" || -n "$container" ]] && echo "⬢ "
-}
-
-ssh_connection() {
-  [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && echo "🌐 "
-}
-
-my_git_prompt() {
-  local branch
-  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-  [[ -n "$branch" ]] && echo " ‹ $fg_bold_yellow$branch$reset_color ›"
-}
-
-exec_time_prompt() {
-  (( CMD_EXEC_TIME > 2000 )) && {
-    local total_ms=$((CMD_EXEC_TIME))
-    local sec=$((total_ms / 1000))
-    local ms=$((total_ms % 1000))
-    echo " ⏱️ $(printf "%.3f" "$((total_ms))e-3")s"
-  }
-}
-
-venv_prompt() {
-  if [[ -n "$VIRTUAL_ENV" ]]; then
-    local venv_name=${VIRTUAL_ENV:t}
-    echo " (${fg_bold_cyan}${venv_name}${reset_color})"
-  elif [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-    echo " (${fg_bold_cyan}${CONDA_DEFAULT_ENV}${reset_color})"
-  fi
-}
-
-sudo_prompt() {
-  sudo -n true 2>/dev/null && echo " 🔑"
-}
-
-ret_status() {
-  (( RET_STATUS == 0 )) && echo "%F{green}0%f" || echo "%F{red}${RET_STATUS}%f"
-}
-
-
-# === Docker статус (кэшируется) ===
-docker_check() {
-  (( EPOCHSECONDS - LAST_DOCKER_CHECK < DOCKER_CACHE_AGE )) && return
-  
-  # Проверяем доступность демона через минимальный запрос
-  if docker info --format '{{.ServerVersion}}' >/dev/null 2>&1; then
-    # Получаем количество запущенных контейнеров (без таблицы)
-    local running=$(docker ps -q 2>/dev/null | wc -l)
-    if (( running > 0 )); then
-      DOCKER_STATUS=" 🐳${running}"
-    else
-      DOCKER_STATUS=" 🐳"
-    fi
-  else
-    DOCKER_STATUS=""
-  fi
-  
-  LAST_DOCKER_CHECK=$EPOCHSECONDS
-}
-
-docker_prompt() {
-  docker_check
-  echo "$DOCKER_STATUS"
-}
-
-# === Формируем приглашение (без CPU/MEM) ===
-PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${fg_bold_green}%m${reset_color}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
+# === Формирование приглашения ===
+# Порядок: [контейнер] [SSH] хост [ветка] [venv] [sudo] [pgp] [docker] : путь [время]
+# Статус последней команды — на новой строке
+PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
 [$(ret_status)] %# '
