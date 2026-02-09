@@ -463,8 +463,29 @@ precmd() {
   fi
 }
 
-# === Формирование приглашения ===
-# Порядок: [контейнер] [SSH] хост [ветка] [venv] [sudo] [pgp] [docker] : путь [время]
-# Статус последней команды — на новой строке
-PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
+get_load_color() {
+  awk -v n="$1" 'BEGIN {
+    if (n < 1.0) print "green"
+    else if (n < 2.0) print "yellow"
+    else if (n < 3.0) print "orange"
+    else print "red"
+  }'
+}
+
+#LA
+colored_uptime() {
+  local cores=$(nproc 2>/dev/null || echo 1)
+  local -a loads
+  read -r -A loads < /proc/loadavg
+  local parts=()
+  for i in 1 2 3; do
+    local norm=$(awk -v l="${loads[$i]}" -v c="$cores" 'BEGIN {printf "%.2f", l/c}')
+    local color=$(get_load_color "$norm")
+    parts+=("%F{$color}$norm%f")
+  done
+  echo "${(j: :)parts} [%F{blue}$cores%f]"
+}
+
+PROMPT='$(colored_uptime)
+$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
 [$(ret_status)] %# '
