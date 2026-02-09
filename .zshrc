@@ -383,9 +383,6 @@ exec_time_prompt() {
   
   if (( sec < 10 )); then
     echo " ⏱️ $(printf "%.2f" "$((total_ms))e-3")s"
-  else
-    local ms=$((total_ms % 1000))
-    echo " ⏱️ ${sec}s${ms}ms"
   fi
 }
 
