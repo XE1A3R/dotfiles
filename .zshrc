@@ -324,18 +324,29 @@ typeset -g PGP_CACHE_AGE=30
 typeset -g PGP_UNLOCKED=0
 typeset -g RET_STATUS=0
 
-# === GPG/PGP статус для pass ===
+# === Надёжная проверка pass (через --pinentry-mode cancel) ===
 pgp_check() {
+  # Если нет хранилища — не показываем индикатор
   [[ ! -d ~/.password-store ]] && return 1
   
-  # Кэшируем результат (не проверяем чаще чем раз в 30 сек)
+  # Кэшируем результат на 5 секунд
   (( EPOCHSECONDS - LAST_PGP_CHECK < PGP_CACHE_AGE )) && return $PGP_UNLOCKED
   
-  # Проверяем: есть ли кэшированные пароли в gpg-agent?
-  if gpg-connect-agent 'KEYINFO --list' /bye 2>/dev/null | grep -q 'D.*cached'; then
-    PGP_UNLOCKED=1
+  # Находим первую запись в хранилище
+  local first_entry
+  first_entry=$(find ~/.password-store -name "*.gpg" -type f 2>/dev/null | head -n1)
+  
+  if [[ -n "$first_entry" ]]; then
+    # Проверяем расшифровку БЕЗ запроса пароля:
+    # --pinentry-mode cancel → немедленно отменить, если нужен пароль
+    # --batch --quiet → без интерактива и лишнего вывода
+    if gpg --pinentry-mode cancel --batch --quiet --decrypt "$first_entry" 2>/dev/null >/dev/null; then
+      PGP_UNLOCKED=0  # 0 = успех = РАЗБЛОКИРОВАНО
+    else
+      PGP_UNLOCKED=1  # 1 = ошибка = ЗАБЛОКИРОВАНО
+    fi
   else
-    PGP_UNLOCKED=0
+    PGP_UNLOCKED=0  # пустое хранилище — считаем разблокированным
   fi
   
   LAST_PGP_CHECK=$EPOCHSECONDS
@@ -343,7 +354,10 @@ pgp_check() {
 }
 
 pgp_prompt() {
-  pgp_check && echo " 🔓" 
+  # Показываем индикатор ТОЛЬКО если есть хранилище
+  [[ -d ~/.password-store ]] || return
+  
+  pgp_check && echo " 🔓"
 }
 
 # === Основные функции ===
@@ -403,6 +417,32 @@ ret_status() {
   (( RET_STATUS == 0 )) && echo "%F{green}0%f" || echo "%F{red}${RET_STATUS}%f"
 }
 
+
+# === Docker статус (кэшируется) ===
+docker_check() {
+  (( EPOCHSECONDS - LAST_DOCKER_CHECK < DOCKER_CACHE_AGE )) && return
+  
+  # Проверяем доступность демона через минимальный запрос
+  if docker info --format '{{.ServerVersion}}' >/dev/null 2>&1; then
+    # Получаем количество запущенных контейнеров (без таблицы)
+    local running=$(docker ps -q 2>/dev/null | wc -l)
+    if (( running > 0 )); then
+      DOCKER_STATUS=" 🐳${running}"
+    else
+      DOCKER_STATUS=" 🐳"
+    fi
+  else
+    DOCKER_STATUS=""
+  fi
+  
+  LAST_DOCKER_CHECK=$EPOCHSECONDS
+}
+
+docker_prompt() {
+  docker_check
+  echo "$DOCKER_STATUS"
+}
+
 # === Формируем приглашение (без CPU/MEM) ===
-PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${fg_bold_green}%m${reset_color}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt) : %~$(exec_time_prompt)
+PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${fg_bold_green}%m${reset_color}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
 [$(ret_status)] %# '
