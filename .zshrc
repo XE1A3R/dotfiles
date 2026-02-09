@@ -177,7 +177,7 @@ function app() {
 #ZSH_THEME="zhann"
 #ZSH_THEME="alanpeabody"
 #ZSH_THEME="peepcode"
-ZSH_THEME="mortalscumbag"
+#ZSH_THEME="mortalscumbag"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -306,3 +306,102 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 [[ -f /home/sasha/.dart-cli-completion/zsh-config.zsh ]] && . /home/sasha/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
+
+# ===== Кастомное приглашение (без системной статистики) =====
+
+# Цвета
+fg_bold_green="%F{green}%B"
+fg_bold_yellow="%F{yellow}%B"
+fg_bold_cyan="%F{cyan}%B"
+fg_bold_red="%F{red}%B"
+reset_color="%b%f"
+
+# Глобальные переменные
+typeset -g CMD_START_TIME
+typeset -g CMD_EXEC_TIME
+typeset -g LAST_PGP_CHECK=0
+typeset -g PGP_CACHE_AGE=30
+typeset -g PGP_UNLOCKED=0
+typeset -g RET_STATUS=0
+
+# === GPG/PGP статус для pass ===
+pgp_check() {
+  [[ ! -d ~/.password-store ]] && return 1
+  
+  # Кэшируем результат (не проверяем чаще чем раз в 30 сек)
+  (( EPOCHSECONDS - LAST_PGP_CHECK < PGP_CACHE_AGE )) && return $PGP_UNLOCKED
+  
+  # Проверяем: есть ли кэшированные пароли в gpg-agent?
+  if gpg-connect-agent 'KEYINFO --list' /bye 2>/dev/null | grep -q 'D.*cached'; then
+    PGP_UNLOCKED=1
+  else
+    PGP_UNLOCKED=0
+  fi
+  
+  LAST_PGP_CHECK=$EPOCHSECONDS
+  return $PGP_UNLOCKED
+}
+
+pgp_prompt() {
+  pgp_check && echo " 🔓" || echo " 🔒"
+}
+
+# === Основные функции ===
+preexec() {
+  CMD_START_TIME=$EPOCHREALTIME
+}
+
+precmd() {
+  RET_STATUS=$?
+  
+  if [[ -n "$CMD_START_TIME" ]]; then
+    local end_time=$EPOCHREALTIME
+    CMD_EXEC_TIME=$(( (end_time - CMD_START_TIME) * 1000 ))
+    unset CMD_START_TIME
+  else
+    CMD_EXEC_TIME=0
+  fi
+}
+
+_toolbox_prompt_info() {
+  [[ -n "$TOOLBOX_PATH" || -n "$container" ]] && echo "⬢ "
+}
+
+ssh_connection() {
+  [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && echo "🌐 "
+}
+
+my_git_prompt() {
+  local branch
+  branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+  [[ -n "$branch" ]] && echo " ‹ $fg_bold_yellow$branch$reset_color ›"
+}
+
+exec_time_prompt() {
+  (( CMD_EXEC_TIME > 2000 )) && {
+    local sec=$((CMD_EXEC_TIME / 1000))
+    local ms=$((CMD_EXEC_TIME % 1000))
+    echo " ⏱️ ${sec}s${ms}ms"
+  }
+}
+
+venv_prompt() {
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    local venv_name=${VIRTUAL_ENV:t}
+    echo " (${fg_bold_cyan}${venv_name}${reset_color})"
+  elif [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+    echo " (${fg_bold_cyan}${CONDA_DEFAULT_ENV}${reset_color})"
+  fi
+}
+
+sudo_prompt() {
+  sudo -n true 2>/dev/null && echo " 🔑"
+}
+
+ret_status() {
+  (( RET_STATUS == 0 )) && echo "%F{green}0%f" || echo "%F{red}${RET_STATUS}%f"
+}
+
+# === Формируем приглашение (без CPU/MEM) ===
+PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${fg_bold_green}%m${reset_color}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt) : %~$(exec_time_prompt)
+[$(ret_status)] %# '
