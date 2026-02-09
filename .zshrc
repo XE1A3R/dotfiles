@@ -343,7 +343,7 @@ pgp_check() {
 }
 
 pgp_prompt() {
-  pgp_check && echo " 🔓" || echo " 🔒"
+  pgp_check && echo " 🔓" 
 }
 
 # === Основные функции ===
@@ -379,9 +379,10 @@ my_git_prompt() {
 
 exec_time_prompt() {
   (( CMD_EXEC_TIME > 2000 )) && {
-    local sec=$((CMD_EXEC_TIME / 1000))
-    local ms=$((CMD_EXEC_TIME % 1000))
-    echo " ⏱️ ${sec}s${ms}ms"
+    local total_ms=$((CMD_EXEC_TIME))
+    local sec=$((total_ms / 1000))
+    local ms=$((total_ms % 1000))
+    echo " ⏱️ $(printf "%.3f" "$((total_ms))e-3")s"
   }
 }
 
