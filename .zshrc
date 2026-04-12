@@ -4,6 +4,7 @@ export EDITOR=nvim
 export SDL_AUDIODRIVER=alsa
 export GPG_TTY=$(tty)
 export ZSH_COMPDUMP="/tmp/.zcompdump-$HOST"
+#export WLR_DRM_DEVICES=/dev/dri/renderD128
 
 autoload -Uz compinit
 compinit -d ~/.zcompdump
@@ -177,7 +178,7 @@ function app() {
 #ZSH_THEME="zhann"
 #ZSH_THEME="alanpeabody"
 #ZSH_THEME="peepcode"
-#ZSH_THEME="mortalscumbag"
+ZSH_THEME="mortalscumbag"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -486,6 +487,6 @@ colored_uptime() {
   echo "${(j: :)parts} [%F{blue}$cores%f]"
 }
 
-PROMPT='$(colored_uptime)
-$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
-[$(ret_status)] %# '
+#PROMPT='$(colored_uptime)
+#PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
+#[$(ret_status)] %# '
