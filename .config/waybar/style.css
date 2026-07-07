@@ -33,7 +33,7 @@ window#waybar {
     padding: 0 12px;
 }
 
-#clock, #cpu, #memory, #disk, #pulseaudio, #battery, #network {
+#clock, #cpu, #memory, #disk, #pulseaudio, #battery, #bluetooth, #network {
     padding: 0 12px;
     margin: 0 2px;
     background: #313244;
