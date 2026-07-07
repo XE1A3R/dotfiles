@@ -1,19 +1,20 @@
+# === ПРОФИЛИРОВАНИЕ (Раскомментируй эту строку, если хочешь найти скрытые тормоза) ===
+# zmodload zsh/zprof
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export QT_STYLE_OVERRIDE=Fusion
+#export QSG_RHI_BACKEND=vulkan
+#export QT_QPA_PLATFORMTHEME=qt6ct
 export EDITOR=nvim
-export SDL_AUDIODRIVER=alsa
 export GPG_TTY=$(tty)
-export ZSH_COMPDUMP="/tmp/.zcompdump-$HOST"
-#export WLR_DRM_DEVICES=/dev/dri/renderD128
 
-autoload -Uz compinit
-compinit -d ~/.zcompdump
+export ZSH_COMPDUMP="/tmp/.zcompdump-$HOST"
 
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
-export GPG_TTY=$(tty)
 gpg-connect-agent updatestartuptty /bye >/dev/null
 
 # Development environment variables
@@ -21,24 +22,15 @@ export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.cargo/bin
-export PATH=$PATH:$HOME/.npm-global/bin
-
-# Node.js version management
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-# Python virtual environment
-export PYTHONPATH="${PYTHONPATH}:$HOME/.local/lib/python3.*/site-packages"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+_comp_options+=(globdots)
 
 # Enhanced aliases for development
-
-alias proxy="export http_proxy="http://127.0.0.1:9080"; export https_proxy="http://127.0.0.1:9080"; export ALL_PROXY="socks5://127.0.0.1:9050"; export no_proxy="localhost,127.0.0.1,192.168.1.0/24""
-alias no-proxy="env --unset=http_proxy --unset=https_proxy --unset=HTTP_PROXY --unset=HTTPS_PROXY --unset=ALL_PROXY"
 alias scron="su -c $(printf "%q " "crontab -e")"
 alias poweroff-update="paru -Syu --noconfirm; poweroff"
 alias vim="nvim"
@@ -148,129 +140,18 @@ function find-in-files() {
     find . -type f -name "*$1*" -exec grep -l "$2" {} \;
 }
 
-function create-python-project() {
-    mkcd "$1"
-    python3 -m venv venv
-    echo "venv/" > .gitignore
-    echo "*.pyc" >> .gitignore
-    echo "__pycache__/" >> .gitignore
-    source venv/bin/activate
-    echo "Python project '$1' created with virtual environment"
-}
-
-function create-node-project() {
-    mkcd "$1"
-    npm init -y
-    echo "node_modules/" > .gitignore
-    echo "*.log" >> .gitignore
-    echo "dist/" >> .gitignore
-    echo "Node.js project '$1' created"
-}
-
 function app() {
     nohup proxychains4 "$1" &!
 }
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="zhann"
-#ZSH_THEME="alanpeabody"
-#ZSH_THEME="peepcode"
+# Set name of the theme to load
 ZSH_THEME="mortalscumbag"
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
 # Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-#plugins=(git)
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-autocomplete web-search sudo jsontools pass rsync fzf history systemd systemadmin docker docker-compose npm node pip python)
+# УБРАН zsh-autocomplete: он известен тем, что вызывает сильные тормоза и конфликты с autosuggestions.
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search sudo jsontools pass rsync fzf history systemd systemadmin docker docker-compose npm node pip python)
+
 source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Enhanced history settings
 HISTSIZE=10000
@@ -281,13 +162,6 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 
-# Better completion
-autoload -U compinit
-zstyle ':completion:*' menu select
-zmodload zsh/complist
-compinit
-_comp_options+=(globdots)
-
 # Key bindings
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -296,31 +170,24 @@ bindkey '^[[Z' reverse-menu-complete
 # Auto-completion for custom functions
 autoload -U +X bashcompinit && bashcompinit
 
-# Load additional tools if available
+# Load fzf (оставили только один вызов вместо трех)
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-[ -f /usr/share/fzf/completion.zsh ] && source /usr/share/fzf/completion.zsh
-[ -f /usr/share/fzf/key-bindings.zsh ] && source /usr/share/fzf/key-bindings.zsh
+
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
-## [Completion]
-## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/sasha/.dart-cli-completion/zsh-config.zsh ]] && . /home/sasha/.dart-cli-completion/zsh-config.zsh || true
-## [/Completion]
-
-# ===== Кастомное приглашение — минималистичное и информативное =====
 
 # === Цветовая палитра (единая точка управления) ===
 typeset -gA PROMPT_COLORS
 PROMPT_COLORS=(
-  host        "%F{green}%B"      # хост
-  branch      "%F{magenta}"      # git-ветка
-  staged      "%F{yellow}"       # staged изменения
-  unstaged    "%F{red}"          # unstaged изменения
-  untracked   "%F{blue}"         # untracked файлы
-  venv        "%F{cyan}%B"       # виртуальное окружение
-  success     "%F{green}"        # статус 0
-  error       "%F{red}%B"        # статус ошибки
-  reset       "%b%f"             # сброс стилей
+  host        "%F{green}%B"
+  branch      "%F{magenta}"
+  staged      "%F{yellow}"
+  unstaged    "%F{red}"
+  untracked   "%F{blue}"
+  venv        "%F{cyan}%B"
+  success     "%F{green}"
+  error       "%F{red}%B"
+  reset       "%b%f"
 )
 
 # === Глобальные переменные (состояние между вызовами) ===
@@ -334,19 +201,15 @@ typeset -g PGP_UNLOCKED=1
 typeset -g DOCKER_STATUS=""
 typeset -g RET_STATUS=0
 
-# === Индикаторы (каждый — независимая функция) ===
-
-# Toolbox/Podman контейнер
+# === Индикаторы ===
 _toolbox_prompt_info() {
   [[ -n "$TOOLBOX_PATH" || -n "$container" ]] && echo "⬢ "
 }
 
-# SSH-сессия
 ssh_connection() {
   [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" ]] && echo "🌐 "
 }
 
-# Git-репозиторий с цветными индикаторами состояния
 my_git_prompt() {
   git rev-parse --git-dir >/dev/null 2>&1 || return
   
@@ -357,17 +220,11 @@ my_git_prompt() {
   
   local indicators=()
   
-  # Staged изменения (жёлтый)
   git diff --cached --quiet 2>/dev/null || indicators+=("${PROMPT_COLORS[staged]}●${PROMPT_COLORS[reset]}")
-  
-  # Unstaged изменения (красный)
   git diff --quiet 2>/dev/null || indicators+=("${PROMPT_COLORS[unstaged]}●${PROMPT_COLORS[reset]}")
-  
-  # Untracked файлы (синий)
   git ls-files --others --exclude-standard --error-unmatch 2>/dev/null | grep -q . && \
     indicators+=("${PROMPT_COLORS[untracked]}●${PROMPT_COLORS[reset]}")
   
-  # Формируем вывод
   if (( ${#indicators[@]} )); then
     echo " ${PROMPT_COLORS[branch]}‹ ${branch} ${(j::)indicators} ›${PROMPT_COLORS[reset]}"
   else
@@ -375,7 +232,6 @@ my_git_prompt() {
   fi
 }
 
-# Время выполнения команды (>2 сек)
 exec_time_prompt() {
   (( CMD_EXEC_TIME > 2000 )) || return
   
@@ -387,7 +243,6 @@ exec_time_prompt() {
   fi
 }
 
-# Виртуальное окружение (venv/conda)
 venv_prompt() {
   if [[ -n "$VIRTUAL_ENV" ]]; then
     echo " ${PROMPT_COLORS[venv]}(${VIRTUAL_ENV:t})${PROMPT_COLORS[reset]}"
@@ -396,16 +251,13 @@ venv_prompt() {
   fi
 }
 
-# Статус sudo (без пароля)
 sudo_prompt() {
   sudo -n true 2>/dev/null && echo " 🔑"
 }
 
-# Статус GPG для pass (только если хранилище существует)
 pgp_prompt() {
   [[ -d ~/.password-store ]] || return
   
-  # Кэшируем проверку
   (( EPOCHSECONDS - LAST_PGP_CHECK < PGP_CACHE_AGE )) || {
     local first_entry
     first_entry=$(find ~/.password-store -name "*.gpg" -type f 2>/dev/null | head -n1)
@@ -414,17 +266,15 @@ pgp_prompt() {
       gpg --pinentry-mode cancel --batch --quiet --decrypt "$first_entry" 2>/dev/null >/dev/null
       PGP_UNLOCKED=$?
     else
-      PGP_UNLOCKED=0  # пустое хранилище = разблокировано
+      PGP_UNLOCKED=0
     fi
     
     LAST_PGP_CHECK=$EPOCHSECONDS
   }
   
-  # Показываем статус
   (( PGP_UNLOCKED == 0 )) && echo " 🔓"
 }
 
-# Статус Docker (количество запущенных контейнеров)
 docker_prompt() {
   (( EPOCHSECONDS - LAST_DOCKER_CHECK < DOCKER_CACHE_AGE )) || {
     if docker info --format '{{.ServerVersion}}' >/dev/null 2>&1; then
@@ -439,15 +289,13 @@ docker_prompt() {
   [[ -n "$DOCKER_STATUS" ]] && echo "$DOCKER_STATUS"
 }
 
-# Статус последней команды (цветной)
 ret_status() {
   (( RET_STATUS == 0 )) && \
     echo "${PROMPT_COLORS[success]}${RET_STATUS}${PROMPT_COLORS[reset]}" || \
     echo "${PROMPT_COLORS[error]}${RET_STATUS}${PROMPT_COLORS[reset]}"
 }
 
-# === Хуки zsh (автоматические вызовы) ===
-
+# === Хуки zsh ===
 preexec() {
   CMD_START_TIME=$EPOCHREALTIME
 }
@@ -473,7 +321,6 @@ get_load_color() {
   }'
 }
 
-#LA
 colored_uptime() {
   local cores=$(nproc 2>/dev/null || echo 1)
   local -a loads
@@ -487,6 +334,8 @@ colored_uptime() {
   echo "${(j: :)parts} [%F{blue}$cores%f]"
 }
 
-#PROMPT='$(colored_uptime)
-#PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
-#[$(ret_status)] %# '
+# PROMPT='$(_toolbox_prompt_info)$(ssh_connection)${PROMPT_COLORS[host]}%m${PROMPT_COLORS[reset]}$(my_git_prompt)$(venv_prompt)$(sudo_prompt)$(pgp_prompt)$(docker_prompt) : %~$(exec_time_prompt)
+# [$(ret_status)] %# '
+
+# === ПРОФИЛИРОВАНИЕ (Раскомментируй эту строку, чтобы увидеть отчет о тормозах) ===
+# zprof | head -n 30
