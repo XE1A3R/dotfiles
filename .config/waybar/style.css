@@ -105,3 +105,19 @@ window#waybar {
 #custom-mic.yes-idle, #custom-mic.yes-rec {
     color: #6c7086; /* Серый, когда замьючен */
 }
+
+
+/* Pulseaudio Bluetooth states */
+#pulseaudio.bluetooth {
+    color: #89b4fa;
+}
+
+#pulseaudio.battery-warning {
+    color: #f9e2af;
+}
+
+#pulseaudio.battery-critical {
+    color: #f38ba8;
+    animation: blink 1s linear infinite alternate;
+}
+

@@ -55,11 +55,17 @@
         "path": "/"
     },
     
-    "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰖁",
-        "format-icons": ["󰕿", "󰖀", "󰕾"],
-		"on-click": "pavucontrol"
+	"pulseaudio": {
+	    "format": "{volume}% {icon}",
+	    "format-bluetooth": "{volume}% {icon}",
+	    "format-muted": "",
+	    "format-icons": {
+	        "default": ["󰕿", "󰖀", "󰕾"]
+	    },
+	    "scroll-step": 1,
+	    "on-click": "pavucontrol",
+	    "on-click-right": "wpctl set-default @NEXT_SINK@",
+	    "max-length": 50
 	},
 
 	"custom/mic": {
