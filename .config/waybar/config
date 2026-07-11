@@ -98,17 +98,21 @@
         "tooltip-format-disconnected": "Сеть отключена",
         "on-click": "nm-connection-editor"
     },
+
 	"bluetooth": {
-		"format": " {status}",
-		"format-connected": " {device_alias}",
-		"format-connected-battery": " {device_alias} {device_battery_percentage}%",
-		// "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
-		"tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
-		"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
-		"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-		"tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
-		"on-click": "kitty bluetui"
-	},
+	    "format": " {status}",
+	    "format-disabled": "<span color='#6c7086'> Off</span>",
+	    "format-off": "<span color='#6c7086'> Off</span>",
+	    "format-connected": "<span color='#a6e3a1'> {device_alias}</span>",
+	    "format-connected-battery": "<span color='#a6e3a1'> {device_alias}</span> <span color='#89b4fa'>󰂃 {device_battery_percentage}%</span>",
+	    "format-disconnected": "<span color='#6c7086'></span>",
+	    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+	    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+	    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+	    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+	    "on-click": "kitty bluetui"
+	},	
+
 	"tray": {
         "spacing": 10,
 		"icon-size": 16,

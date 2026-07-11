@@ -121,3 +121,21 @@ window#waybar {
     animation: blink 1s linear infinite alternate;
 }
 
+/* Bluetooth states */
+#bluetooth {
+    color: #6c7086;
+}
+
+#bluetooth.connected {
+    color: #a6e3a1;
+}
+
+#bluetooth.battery-warning {
+    color: #f9e2af;
+}
+
+#bluetooth.battery-critical {
+    color: #f38ba8;
+    animation: blink 1s linear infinite alternate;
+}
+
