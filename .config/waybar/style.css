@@ -46,6 +46,7 @@ window#waybar {
     border-radius: 4px;
 }
 
+/* Язык */
 #language {
     padding: 0 12px;
     margin: 0 2px;
@@ -55,18 +56,38 @@ window#waybar {
     font-weight: bold;
 }
 
-#battery.warning, #battery.critical, #battery.urgent {
+/* Стили для батареи */
+#battery.warning,
+#battery.critical,
+#battery.urgent {
     color: #f38ba8;
-    animation: blink 1s linear infinite;
-}
-@keyframes blink {
-    to { color: #1e1e2e; }
+    animation: blink 1s linear infinite alternate;
 }
 
+#battery.charging {
+    color: #a6e3a1;
+}
+
+#battery.plugged {
+    color: #89b4fa;
+}
+
+/* Анимация мигания */
+@keyframes blink {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.3;
+    }
+}
+
+/* Muted audio */
 #pulseaudio.muted {
     color: #6c7086;
 }
 
+/* Disconnected network */
 #network.disconnected {
     color: #f38ba8;
 }
