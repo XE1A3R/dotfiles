@@ -45,3 +45,28 @@ window#waybar {
     background: #313244;
     border-radius: 4px;
 }
+
+#language {
+    padding: 0 12px;
+    margin: 0 2px;
+    background: #313244;
+    border-radius: 4px;
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+#battery.warning, #battery.critical, #battery.urgent {
+    color: #f38ba8;
+    animation: blink 1s linear infinite;
+}
+@keyframes blink {
+    to { color: #1e1e2e; }
+}
+
+#pulseaudio.muted {
+    color: #6c7086;
+}
+
+#network.disconnected {
+    color: #f38ba8;
+}

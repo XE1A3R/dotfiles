@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "network", "bluetooth", "tray"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "network", "bluetooth", "tray", "hyprland/language"],
     
     "keyboard": {
         "format": "{}",
@@ -92,5 +92,10 @@
 	},
 	"tray": {
         "spacing": 10
-    }
+    },
+	"hyprland/language": {
+    	"format": "{}",
+	    "format-en": "EN",
+	    "format-ru": "RU"
+	}
 }
