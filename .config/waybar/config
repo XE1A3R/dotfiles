@@ -86,18 +86,19 @@
 	    }
 	},
 	
-    "network": {
-        "interval": 30,
-        "format": "{ifname}",
-        "format-wifi": "󰖩 {essid} ({signalStrength}%)",
-        "format-ethernet": "󰈀 {ifname}",
-        "format-disconnected": "󰖪 Нет подключения",
-        "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
-        "tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
-        "tooltip-format-ethernet": "{ipaddr}/{cidr}",
-        "tooltip-format-disconnected": "Сеть отключена",
-        "on-click": "nm-connection-editor"
-    },
+	"network": {
+	    "interval": 5,
+	    "format": "{ifname}",
+	    "format-wifi": " {essid} ({signalStrength}%)",
+	    "format-ethernet": "󰈀 {ifname}",
+	    "format-disconnected": "󰖪 Нет подключения",
+	    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+	    "tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
+	    "tooltip-format-ethernet": "{ipaddr}/{cidr}",
+	    "tooltip-format-disconnected": "Сеть отключена",
+	    "on-click": "nm-connection-editor",
+	    "signal-thresholds": [0, 30, 60, 80]
+	},
 
 	"bluetooth": {
 	    "format": " {status}",
