@@ -70,7 +70,7 @@
 
 	"custom/mic": {
 	    "format": "{}",
-	    "exec": "VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ | grep -o '[0-9]*%' | head -1); MUTE=$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -E -o 'yes|no'); REC=$(pactl list short source-outputs | grep -q . && echo rec || echo idle); ICON=$([ \"$MUTE\" = \"yes\" ] && echo '' || echo '󰍬'); echo '{\"text\": \"'$ICON' '$VOL'\", \"class\": \"'$MUTE'-'$REC'\"}'",
+	    "exec": "VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ | grep -o '[0-9]*%' | head -1); MUTE=$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -E -o 'yes|no'); REC=$(pactl list short source-outputs | grep -q . && echo rec || echo idle); ICON=$([ \"$MUTE\" = \"yes\" ] && echo '󰍭' || echo '󰍬'); echo '{\"text\": \"'$ICON' '$VOL'\", \"class\": \"'$MUTE'-'$REC'\"}'",
 	    "return-type": "json",
 	    "interval": 1,
 	    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
