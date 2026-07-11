@@ -140,23 +140,8 @@ window#waybar {
 }
 
 /* WiFi сигнал - отличный (80-100%) */
-#network.wifi.strong {
-    color: #a6e3a1; /* Зеленый Catppuccin */
-}
-
-/* WiFi сигнал - хороший (60-79%) */
-#network.wifi.good {
-    color: #f9e2af; /* Желтый Catppuccin */
-}
-
-/* WiFi сигнал - слабый (30-59%) */
-#network.wifi.weak {
-    color: #fab387; /* Оранжевый Catppuccin */
-}
-
-/* WiFi сигнал - очень слабый (0-29%) */
-#network.wifi.poor {
-    color: #f38ba8; /* Красный Catppuccin */
+#network.wifi {
+    color: #a6e3a1; /* Зеленый */
 }
 
 /* Ethernet - всегда синий */
