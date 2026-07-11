@@ -33,7 +33,7 @@ window#waybar {
     padding: 0 12px;
 }
 
-#clock, #cpu, #memory, #disk, #pulseaudio, #battery, #bluetooth, #network {
+#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #battery, #bluetooth, #network {
     padding: 0 12px;
     margin: 0 2px;
     background: #313244;
@@ -90,4 +90,18 @@ window#waybar {
 /* Disconnected network */
 #network.disconnected {
     color: #f38ba8;
+}
+
+/* Состояния микрофона */
+#custom-mic.no-rec {
+    color: #f38ba8; /* Красный, когда идет запись */
+    animation: blink 1s linear infinite alternate;
+}
+
+#custom-mic.no-idle {
+    color: #cdd6f4; /* Обычный цвет, просто включен */
+}
+
+#custom-mic.yes-idle, #custom-mic.yes-rec {
+    color: #6c7086; /* Серый, когда замьючен */
 }

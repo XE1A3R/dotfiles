@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "battery", "network", "bluetooth", "tray", "hyprland/language"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "battery", "network", "bluetooth", "tray", "hyprland/language"],
     
     "keyboard": {
         "format": "{}",
@@ -60,7 +60,15 @@
         "format-muted": "󰖁",
         "format-icons": ["󰕿", "󰖀", "󰕾"],
 		"on-click": "pavucontrol"
-    },
+	},
+
+	"custom/mic": {
+	    "format": "{}",
+	    "exec": "VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ | grep -o '[0-9]*%' | head -1); MUTE=$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -E -o 'yes|no'); REC=$(pactl list short source-outputs | grep -q . && echo rec || echo idle); ICON=$([ \"$MUTE\" = \"yes\" ] && echo '' || echo '󰍬'); echo '{\"text\": \"'$ICON' '$VOL'\", \"class\": \"'$MUTE'-'$REC'\"}'",
+	    "return-type": "json",
+	    "interval": 1,
+	    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+	},
 
 	"battery": {
 	    "format": "{icon} {capacity}%",
