@@ -88,11 +88,6 @@ window#waybar {
     color: #6c7086;
 }
 
-/* Disconnected network */
-#network.disconnected {
-    color: #f38ba8;
-}
-
 /* Состояния микрофона */
 #custom-mic.no-rec {
     color: #f38ba8; /* Красный, когда идет запись */
@@ -150,7 +145,8 @@ window#waybar {
     color: #89b4fa;
 }
 
-/* Отключено - серый */
+/* Отключено */
 #network.disconnected {
-    color: #6c7086;
+    color: #f38ba8;
 }
+
