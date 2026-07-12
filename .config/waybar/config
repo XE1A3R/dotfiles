@@ -78,8 +78,11 @@
 
 	"battery": {
 	    "format": "{icon} {capacity}%",
-	    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-	    "states": {
+	 	"format-icons": {
+			"default": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+			"charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
+		},
+			"states": {
 	        "warning": 30,
 	        "critical": 15,
 	        "urgent": 5

@@ -66,6 +66,7 @@ window#waybar {
 
 #battery.charging {
     color: #a6e3a1;
+    animation: blink 1s linear infinite alternate;
 }
 
 #battery.plugged {
