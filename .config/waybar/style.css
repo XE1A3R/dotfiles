@@ -99,7 +99,7 @@ window#waybar {
 }
 
 #custom-mic.yes-idle, #custom-mic.yes-rec {
-    color: #6c7086; /* Серый, когда замьючен */
+    color: #f9e2af; /* Желтый, когда замьючен */
 }
 
 
