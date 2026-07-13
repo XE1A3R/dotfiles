@@ -169,18 +169,15 @@ window#waybar {
 }
 
 /* Screen recording states */
-#custom-screenrec {
-    padding: 0 12px;
-    margin: 0 2px;
-    background: #313244;
-    border-radius: 4px;
-}
-
 #custom-screenrec.idle {
-    color: transparent;
+    color: transparent; /* Скрыта, когда ничего не записывается */
 }
 
 #custom-screenrec.recording {
     color: #f38ba8;
     animation: blink 1s linear infinite alternate;
+}
+
+#custom-screenrec.blocked {
+    color: #f9e2af;
 }

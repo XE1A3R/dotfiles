@@ -83,13 +83,12 @@
 	    "interval": 2,
 	    "on-click": "if lsmod | grep -q uvcvideo; then fuser -k /dev/video* 2>/dev/null; sleep 1; sudo rmmod uvcvideo; else sudo modprobe uvcvideo; fi"
 	},
-
 	"custom/screenrec": {
 	    "format": "{}",
-	    "exec": "if ps aux | grep -E 'obs|wf-recorder|kooha|simple-screenshare|grim|slurp|hyprshare|wlr-screencopy' | grep -v grep -q || pw-cli list-objects 2>/dev/null | grep -q 'video/x-raw'; then echo '{\"text\": \"󰹕\", \"class\": \"recording\"}'; else echo '{\"text\": \"\", \"class\": \"idle\"}'; fi",
+	    "exec": "if pw-cli ls Node 2>&1 | grep -q 'Stream/Input/Video'; then echo '{\"text\": \"󰏡 REC\", \"class\": \"recording\"}'; else echo '{\"text\": \"\", \"class\": \"idle\"}'; fi",
 	    "return-type": "json",
-	    "interval": 2,
-	    "on-click": "pkill -f 'obs|wf-recorder|kooha|simple-screenshare|grim|slurp|hyprshare|wlr-screencopy'; systemctl --user stop xdg-desktop-portal-hyprland; sleep 1; systemctl --user start xdg-desktop-portal-hyprland; notify-send 'Запись экрана остановлена' 'Все процессы захвата экрана завершены' -i screen-share"
+	    "interval": 1,
+    	"on-click": "pw-cli ls Node 2>&1 | grep -B 10 'Stream/Input/Video' | grep 'node.name' | grep -v 'xdg-desktop-portal-hyprland' | grep -oE '\"[^\"]+\"' | tr -d '\"' | xargs -I{} sh -c 'pgrep -ix {} | xargs -r kill -15'; sleep 2; systemctl --user restart xdg-desktop-portal-hyprland; notify-send 'Захват экрана остановлен' 'Процесс-нарушитель завершён'"
 	},
 
 	"battery": {
