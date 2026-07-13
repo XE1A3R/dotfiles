@@ -33,7 +33,7 @@ window#waybar {
     padding: 0 12px;
 }
 
-#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #custom-webcam, #battery, #bluetooth, #network {
+#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #custom-webcam, #custom-screenrec, #battery, #bluetooth, #network {
     padding: 0 12px;
     margin: 0 2px;
     background: #313244;
@@ -166,4 +166,21 @@ window#waybar {
 
 #custom-webcam.blocked {
     color: #cdd6f4;
+}
+
+/* Screen recording states */
+#custom-screenrec {
+    padding: 0 12px;
+    margin: 0 2px;
+    background: #313244;
+    border-radius: 4px;
+}
+
+#custom-screenrec.idle {
+    color: transparent;
+}
+
+#custom-screenrec.recording {
+    color: #f38ba8;
+    animation: blink 1s linear infinite alternate;
 }

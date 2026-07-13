@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "custom/webcam", "battery", "network", "bluetooth", "tray", "hyprland/language"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "custom/webcam", "custom/screenrec", "battery", "network", "bluetooth", "tray", "hyprland/language"],
     
     "keyboard": {
         "format": "{}",
@@ -82,6 +82,14 @@
 	    "return-type": "json",
 	    "interval": 2,
 	    "on-click": "if lsmod | grep -q uvcvideo; then fuser -k /dev/video* 2>/dev/null; sleep 1; sudo rmmod uvcvideo; else sudo modprobe uvcvideo; fi"
+	},
+
+	"custom/screenrec": {
+	    "format": "{}",
+	    "exec": "if ps aux | grep -E 'obs|wf-recorder|kooha|simple-screenshare|grim|slurp|hyprshare|wlr-screencopy' | grep -v grep -q || pw-cli list-objects 2>/dev/null | grep -q 'video/x-raw'; then echo '{\"text\": \"󰹕\", \"class\": \"recording\"}'; else echo '{\"text\": \"\", \"class\": \"idle\"}'; fi",
+	    "return-type": "json",
+	    "interval": 2,
+	    "on-click": "pkill -f 'obs|wf-recorder|kooha|simple-screenshare|grim|slurp|hyprshare|wlr-screencopy'; systemctl --user stop xdg-desktop-portal-hyprland; sleep 1; systemctl --user start xdg-desktop-portal-hyprland; notify-send 'Запись экрана остановлена' 'Все процессы захвата экрана завершены' -i screen-share"
 	},
 
 	"battery": {
