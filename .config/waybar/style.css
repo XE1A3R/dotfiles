@@ -98,7 +98,11 @@ window#waybar {
     color: #cdd6f4; /* Обычный цвет, просто включен */
 }
 
-#custom-mic.yes-idle, #custom-mic.yes-rec {
+#custom-mic.yes-idle {
+    color: #cdd6f4; /* Желтый, когда замьючен */
+}
+
+#custom-mic.yes-rec {
     color: #f9e2af; /* Желтый, когда замьючен */
 }
 
