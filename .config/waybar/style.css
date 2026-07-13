@@ -33,7 +33,7 @@ window#waybar {
     padding: 0 12px;
 }
 
-#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #battery, #bluetooth, #network {
+#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #custom-webcam, #battery, #bluetooth, #network {
     padding: 0 12px;
     margin: 0 2px;
     background: #313244;
@@ -152,5 +152,15 @@ window#waybar {
 /* Отключено */
 #network.disconnected {
     color: #f38ba8;
+}
+
+/* Webcam states */
+#custom-webcam.idle {
+    color: #cdd6f4;
+}
+
+#custom-webcam.recording {
+    color: #f38ba8;
+    animation: blink 1s linear infinite alternate;
 }
 

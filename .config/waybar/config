@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "battery", "network", "bluetooth", "tray", "hyprland/language"],
+    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "custom/webcam", "battery", "network", "bluetooth", "tray", "hyprland/language"],
     
     "keyboard": {
         "format": "{}",
@@ -74,6 +74,14 @@
 	    "return-type": "json",
 	    "interval": 1,
 	    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+	},
+
+	"custom/webcam": {
+	    "format": "{}",
+	    "exec-if": "ls /dev/video* 1>/dev/null 2>&1",
+	    "exec": "if fuser /dev/video* >/dev/null 2>&1; then echo '{\"text\": \"󰕧\", \"class\": \"recording\"}'; else echo '{\"text\": \"󰕧\", \"class\": \"idle\"}'; fi",
+	    "return-type": "json",
+	    "interval": 2
 	},
 
 	"battery": {
