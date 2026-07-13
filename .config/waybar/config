@@ -78,10 +78,10 @@
 
 	"custom/webcam": {
 	    "format": "{}",
-	    "exec": "if [ -f ~/.config/waybar/webcam_blocked ]; then echo '{\"text\": \"󰝧\", \"class\": \"blocked\"}'; elif ls /dev/video* 1>/dev/null 2>&1; then if fuser /dev/video* >/dev/null 2>&1; then echo '{\"text\": \"󰕧\", \"class\": \"recording\"}'; else echo '{\"text\": \"󰕧\", \"class\": \"idle\"}'; fi; else echo ''; fi",
+	    "exec": "if lsmod | grep -q uvcvideo; then if fuser /dev/video* >/dev/null 2>&1; then echo '{\"text\": \"󰕧 REC\", \"class\": \"recording\"}'; else echo '{\"text\": \"󰕧 IDLE\", \"class\": \"idle\"}'; fi; else echo '{\"text\": \"󰕩 BCK\", \"class\": \"blocked\"}'; fi",
 	    "return-type": "json",
-	    "interval": 1,
-	    "on-click": "if [ -f ~/.config/waybar/webcam_blocked ]; then rm ~/.config/waybar/webcam_blocked && sudo modprobe uvcvideo; else fuser -k /dev/video* 2>/dev/null; sleep 1; touch ~/.config/waybar/webcam_blocked && sudo rmmod uvcvideo; fi"
+	    "interval": 2,
+	    "on-click": "if lsmod | grep -q uvcvideo; then fuser -k /dev/video* 2>/dev/null; sleep 1; sudo rmmod uvcvideo; else sudo modprobe uvcvideo; fi"
 	},
 
 	"battery": {

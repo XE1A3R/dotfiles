@@ -155,12 +155,8 @@ window#waybar {
 }
 
 /* Webcam states */
-#custom-webcam.blocked {
-    color: #f9e2af;
-}
-
 #custom-webcam.idle {
-    color: #cdd6f4;
+    color: #f9e2af;
 }
 
 #custom-webcam.recording {
@@ -168,3 +164,6 @@ window#waybar {
     animation: blink 1s linear infinite alternate;
 }
 
+#custom-webcam.blocked {
+    color: #cdd6f4;
+}
