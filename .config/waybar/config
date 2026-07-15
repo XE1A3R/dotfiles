@@ -73,7 +73,9 @@
 	    "exec": "VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -o '[0-9]*%' | head -1); MUTE=$(pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null | grep -E -o 'yes|no'); REC=$(pactl list short source-outputs | grep -q . && echo rec || echo idle); ICON=$([ \"$MUTE\" = \"yes\" ] && echo '󰍭' || echo '󰍬'); exist=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -o '[0-9]*%') && echo '{\"text\": \"'$ICON' '$VOL'\", \"class\": \"'$MUTE'-'$REC'\"}' || echo ''",
 	    "return-type": "json",
 	    "interval": 1,
-	    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+	    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+	    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
+    	"on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-"
 	},
 
 	"custom/webcam": {

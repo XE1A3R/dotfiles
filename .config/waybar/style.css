@@ -99,7 +99,7 @@ window#waybar {
 }
 
 #custom-mic.yes-idle {
-    color: #cdd6f4; /* Желтый, когда замьючен */
+    color: #6c7086;
 }
 
 #custom-mic.yes-rec {
@@ -123,7 +123,7 @@ window#waybar {
 
 /* Bluetooth states */
 #bluetooth {
-    color: #6c7086;
+    color: #cdd6f4;
 }
 
 #bluetooth.connected {
@@ -165,7 +165,7 @@ window#waybar {
 }
 
 #custom-webcam.blocked {
-    color: #cdd6f4;
+    color: #6c7086;
 }
 
 /* Screen recording states */
