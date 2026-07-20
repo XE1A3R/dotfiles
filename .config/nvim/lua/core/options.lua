@@ -33,4 +33,7 @@ opt.listchars = { tab = "»·", trail = "·", nbsp = "␣" }
 opt.encoding = "utf-8"
 opt.fileencoding = "utf-8"
 
-vim.opt.scrolloff = 8
+opt.scrolloff = 8
+
+opt.foldmethod = "indent"
+opt.foldenable = true
