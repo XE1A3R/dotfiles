@@ -35,11 +35,13 @@
         }
     },
     
-    "clock": {
-        "format": "{:%H:%M   %d/%m}",
-        "format-alt": "{:%A, %B %d, %Y}"
-    },
-    
+   "clock": {
+	    "format": "{:%H:%M   %d/%m}",
+	    "tooltip-format": "{:%A, %B %d, %Y}",
+	    "interval": 60,
+    	"locale": "ru_RU.UTF-8"
+	},
+
     "cpu": {
         "format": "󰻠 {usage}%",
         "tooltip": true,
