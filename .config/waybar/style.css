@@ -33,7 +33,7 @@ window#waybar {
     padding: 0 12px;
 }
 
-#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #custom-webcam, #custom-screenrec, #battery, #bluetooth, #network {
+#clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #custom-webcam, #custom-screenrec, #custom-pass, #battery, #bluetooth, #network {
     padding: 0 12px;
     margin: 0 2px;
     background: #313244;
@@ -180,4 +180,13 @@ window#waybar {
 
 #custom-screenrec.blocked {
     color: #f9e2af;
+}
+
+/* Pass (GnuPG) states */
+#custom-pass.unlocked {
+    color: #a6e3a1; /* Зеленый, когда ключ в кэше */
+}
+
+#custom-pass.locked {
+    color: #f38ba8; /* Красный, когда требуется ввод пароля */
 }

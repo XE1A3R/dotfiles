@@ -6,7 +6,7 @@
     
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "custom/webcam", "custom/screenrec", "battery", "network", "bluetooth", "tray", "hyprland/language"],
+	"modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "custom/webcam", "custom/screenrec", "custom/pass", "battery", "network", "bluetooth", "tray", "hyprland/language"],
     
     "keyboard": {
         "format": "{}",
@@ -68,6 +68,15 @@
 	    "on-click": "pavucontrol",
 	    "on-click-right": "wpctl set-default @NEXT_SINK@",
 	    "max-length": 50
+	},
+
+	"custom/pass": {
+	   "format": "{}",
+	   "exec": "~/.local/bin/pass-status",
+	   "return-type": "json",
+	   "interval": 5,
+	   "on-click": "gpg-connect-agent reloadagent /bye && notify-send 'pass' 'Хранилище заблокировано'",
+	   "on-click-right": "kitty -e pass"
 	},
 
 	"custom/mic": {

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+PASS_DIR="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+GPG_ID_FILE="$PASS_DIR/.gpg-id"
+
+# Если хранилище не инициализировано
+if [[ ! -f "$GPG_ID_FILE" ]]; then
+    echo '{"text": "󰍁", "class": "locked"}'
+    exit 0
+fi
+
+# pass поддерживает несколько ключей в .gpg-id, берем первый (основной)
+GPG_ID=$(head -n 1 "$GPG_ID_FILE")
+
+# Собираем ВСЕ keygrips (master key + subkeys) для данного GPG ID
+# Используем mapfile для чтения в массив (требует bash 4+, на Arch это стандарт)
+mapfile -t KEYGRIPS < <(gpg --with-colons --with-keygrip --list-secret-keys "$GPG_ID" 2>/dev/null | awk -F: '/^grp/ {print $10}')
+
+if [[ ${#KEYGRIPS[@]} -eq 0 ]]; then
+    echo '{"text": "󰍁", "class": "locked"}'
+    exit 0
+fi
+
+# Получаем список всех keygrips, которые сейчас закэшированы в gpg-agent
+# Формат: S KEYINFO <keygrip> <type> <serialno> <idstr> <cached> ...
+# cached находится в 7-м поле. Если оно равно "1", ключ в памяти.
+mapfile -t CACHED_GRIPS < <(gpg-connect-agent 'keyinfo --list' /bye 2>/dev/null | awk '$7 == "1" {print $3}')
+
+# Проверяем пересечение множеств: есть ли хоть один наш keygrip в кэше агента
+UNLOCKED=0
+for grip in "${KEYGRIPS[@]}"; do
+    for cached in "${CACHED_GRIPS[@]}"; do
+        if [[ "$grip" == "$cached" ]]; then
+            UNLOCKED=1
+            break 2 # Выходим из обоих циклов сразу
+        fi
+    done
+done
+
+if [[ "$UNLOCKED" -eq 1 ]]; then
+    echo '{"text": "󰌾", "class": "unlocked"}'
+else
+    echo '{"text": "󰍁", "class": "locked"}'
+fi
