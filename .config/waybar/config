@@ -1,158 +1,195 @@
 {
-    "layer": "top",
-    "position": "top",
-    "height": 35,
-    "spacing": 4,
-    
-    "modules-left": ["hyprland/workspaces", "hyprland/window"],
-    "modules-center": ["clock"],
-	"modules-right": ["cpu", "memory", "disk", "pulseaudio", "custom/mic", "custom/webcam", "custom/screenrec", "custom/pass", "battery", "network", "bluetooth", "tray", "hyprland/language"],
-    
-    "keyboard": {
-        "format": "{}",
-        "format-icons": ["󰌐", "󰌌"]
-    },
-    
-    "hyprland/window": {
-        "format": "{}",
-        "rewrite": {
-            "(.*) - Mozilla Firefox": "🌎 $1",
-            "(.*) - Discord": "💬 $1",
-            "(.*) - Spotify": "🎵 $1"
-        }
-    },
-    
-    "hyprland/workspaces": {
-        "format": "{icon}",
-        "format-icons": {
-            "1": "󰈹",
-            "2": "󰊖", 
-            "3": "󰊌",
-            "4": "󰙯",
-            "5": "󰇮",
-            "active": "󰮯",
-            "default": "󰊠"
-        }
-    },
-    
-   "clock": {
-	    "format": "{:%H:%M   %d/%m}",
-	    "tooltip-format": "{:%A, %B %d, %Y}",
-	    "interval": 60,
-    	"locale": "ru_RU.UTF-8"
+	"layer": "top",
+	"position": "top",
+	"height": 35,
+	"spacing": 4,
+	"modules-left": [
+		"hyprland/workspaces",
+		"hyprland/window"
+	],
+	"modules-center": [
+		"clock"
+	],
+	"modules-right": [
+		"cpu",
+		"memory",
+		"disk",
+		"pulseaudio",
+		"custom/mic",
+		"custom/webcam",
+		"custom/screenrec",
+		"custom/pass",
+		"battery",
+		"network",
+		"bluetooth",
+		"tray",
+		"hyprland/language"
+	],
+	"keyboard": {
+		"format": "{}",
+		"format-icons": [
+			"󰌐",
+			"󰌌"
+		]
 	},
-
-    "cpu": {
-        "format": "󰻠 {usage}%",
-        "tooltip": true,
+	"hyprland/window": {
+		"format": "{}",
+		"rewrite": {
+			"(.*) - Mozilla Firefox": "🌎 $1",
+			"(.*) - Discord": "💬 $1",
+			"(.*) - Spotify": "🎵 $1"
+		}
+	},
+	"hyprland/workspaces": {
+		"format": "{icon}",
+		"format-icons": {
+			"1": "󰈹",
+			"2": "󰊖",
+			"3": "󰊌",
+			"4": "󰙯",
+			"5": "󰇮",
+			"active": "󰮯",
+			"default": "󰊠"
+		}
+	},
+	"clock": {
+		"format": "{:%H:%M   %d/%m}",
+		"tooltip-format": "{:%A, %B %d, %Y}",
+		"interval": 60,
+		"locale": "ru_RU.UTF-8"
+	},
+	"cpu": {
+		"format": "󰻠 {usage}%",
+		"tooltip": true,
 		"on-click": "kitty atop -f -k -H -A 2"
-    },
-    
-    "memory": {
-        "format": "󰍛 {}%"
-    },
-    
-    "disk": {
-        "format": "󰋊 {percentage_used}%",
-        "path": "/"
-    },
-    
+	},
+	"memory": {
+		"format": "󰍛 {}%"
+	},
+	"disk": {
+		"format": "󰋊 {percentage_used}%",
+		"path": "/"
+	},
 	"pulseaudio": {
-	    "format": "{volume}% {icon}",
-	    "format-bluetooth": "{volume}% {icon}",
-	    "format-muted": "",
-	    "format-icons": {
-	        "default": ["󰕿", "󰖀", "󰕾"]
-	    },
-	    "scroll-step": 1,
-	    "on-click": "pavucontrol",
-	    "on-click-right": "wpctl set-default @NEXT_SINK@",
-	    "max-length": 50
+		"format": "{volume}% {icon}",
+		"format-bluetooth": "{volume}% {icon}",
+		"format-muted": "",
+		"format-icons": {
+			"default": [
+				"󰕿",
+				"󰖀",
+				"󰕾"
+			]
+		},
+		"scroll-step": 1,
+		"on-click": "pavucontrol",
+		"on-click-right": "wpctl set-default @NEXT_SINK@",
+		"max-length": 50
 	},
-
 	"custom/pass": {
-	   "format": "{}",
-	   "exec": "~/.local/bin/pass-status",
-	   "return-type": "json",
-	   "interval": 5,
-	   "on-click": "gpg-connect-agent reloadagent /bye && notify-send 'pass' 'Хранилище заблокировано'",
-	   "on-click-right": "kitty -e pass"
+		"format": "{}",
+		"exec": "~/.local/bin/pass-status",
+		"return-type": "json",
+		"interval": 5,
+		"on-click": "gpg-connect-agent reloadagent /bye && notify-send 'pass' 'Хранилище заблокировано'",
+		"on-click-right": "kitty -e pass"
 	},
-
 	"custom/mic": {
-	    "format": "{}",
-	    "exec": "VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -o '[0-9]*%' | head -1); MUTE=$(pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null | grep -E -o 'yes|no'); REC=$(pactl list short source-outputs | grep -q . && echo rec || echo idle); ICON=$([ \"$MUTE\" = \"yes\" ] && echo '󰍭' || echo '󰍬'); exist=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -o '[0-9]*%') && echo '{\"text\": \"'$ICON' '$VOL'\", \"class\": \"'$MUTE'-'$REC'\"}' || echo ''",
-	    "return-type": "json",
-	    "interval": 1,
-	    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-	    "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
-    	"on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-"
+		"format": "{}",
+		"exec": "VOL=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -o '[0-9]*%' | head -1); MUTE=$(pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null | grep -E -o 'yes|no'); REC=$(pactl list short source-outputs | grep -q . && echo rec || echo idle); ICON=$([ \"$MUTE\" = \"yes\" ] && echo '󰍭' || echo '󰍬'); exist=$(pactl get-source-volume @DEFAULT_SOURCE@ 2>/dev/null | grep -o '[0-9]*%') && echo '{\"text\": \"'$ICON' '$VOL'\", \"class\": \"'$MUTE'-'$REC'\"}' || echo ''",
+		"return-type": "json",
+		"interval": 1,
+		"on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+		"on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
+		"on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-"
 	},
-
 	"custom/webcam": {
-	    "format": "{}",
-	    "exec": "if lsmod | grep -q uvcvideo; then if fuser /dev/video* >/dev/null 2>&1; then echo '{\"text\": \"󰕧 REC\", \"class\": \"recording\"}'; else echo '{\"text\": \"󰕧 IDLE\", \"class\": \"idle\"}'; fi; else echo '{\"text\": \"󰕩 BCK\", \"class\": \"blocked\"}'; fi",
-	    "return-type": "json",
-	    "interval": 2,
-	    "on-click": "if lsmod | grep -q uvcvideo; then fuser -k /dev/video* 2>/dev/null; sleep 1; sudo rmmod uvcvideo; else sudo modprobe uvcvideo; fi"
+		"format": "{}",
+		"exec": "if lsmod | grep -q uvcvideo; then if fuser /dev/video* >/dev/null 2>&1; then echo '{\"text\": \"󰕧 REC\", \"class\": \"recording\"}'; else echo '{\"text\": \"󰕧 IDLE\", \"class\": \"idle\"}'; fi; else echo '{\"text\": \"󰕩 BCK\", \"class\": \"blocked\"}'; fi",
+		"return-type": "json",
+		"interval": 2,
+		"on-click": "if lsmod | grep -q uvcvideo; then fuser -k /dev/video* 2>/dev/null; sleep 1; sudo rmmod uvcvideo; else sudo modprobe uvcvideo; fi"
 	},
 	"custom/screenrec": {
-	    "format": "{}",
-	    "exec": "if pw-cli ls Node 2>&1 | grep -q 'Stream/Input/Video'; then echo '{\"text\": \"󰏡 REC\", \"class\": \"recording\"}'; else echo '{\"text\": \"\", \"class\": \"idle\"}'; fi",
-	    "return-type": "json",
-	    "interval": 1,
-    	"on-click": "pw-cli ls Node 2>&1 | grep -B 10 'Stream/Input/Video' | grep 'node.name' | grep -v 'xdg-desktop-portal-hyprland' | grep -oE '\"[^\"]+\"' | tr -d '\"' | xargs -I{} sh -c 'pgrep -ix {} | xargs -r kill -15'; sleep 2; systemctl --user restart xdg-desktop-portal-hyprland; notify-send 'Захват экрана остановлен' 'Процесс-нарушитель завершён'"
+		"format": "{}",
+		"exec": "if pw-cli ls Node 2>&1 | grep -q 'Stream/Input/Video'; then echo '{\"text\": \"󰏡 REC\", \"class\": \"recording\"}'; else echo '{\"text\": \"\", \"class\": \"idle\"}'; fi",
+		"return-type": "json",
+		"interval": 1,
+		"on-click": "pw-cli ls Node 2>&1 | grep -B 10 'Stream/Input/Video' | grep 'node.name' | grep -v 'xdg-desktop-portal-hyprland' | grep -oE '\"[^\"]+\"' | tr -d '\"' | xargs -I{} sh -c 'pgrep -ix {} | xargs -r kill -15'; sleep 2; systemctl --user restart xdg-desktop-portal-hyprland; notify-send 'Захват экрана остановлен' 'Процесс-нарушитель завершён'"
 	},
-
 	"battery": {
-	    "format": "{icon} {capacity}%",
-	 	"format-icons": {
-			"default": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-			"charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
+		"format": "{icon} {capacity}%",
+		"format-icons": {
+			"default": [
+				"󰂎",
+				"󰁺",
+				"󰁻",
+				"󰁼",
+				"󰁽",
+				"󰁾",
+				"󰁿",
+				"󰂀",
+				"󰂁",
+				"󰂂",
+				"󰁹"
+			],
+			"charging": [
+				"󰢟",
+				"󰢜",
+				"󰂆",
+				"󰂇",
+				"󰂈",
+				"󰢝",
+				"󰂉",
+				"󰢞",
+				"󰂊",
+				"󰂋",
+				"󰂅"
+			]
 		},
-			"states": {
-	        "warning": 30,
-	        "critical": 15,
-	        "urgent": 5
-	    }
+		"states": {
+			"warning": 30,
+			"critical": 15,
+			"urgent": 5
+		}
 	},
-	
 	"network": {
-	    "interval": 5,
-	    "format": "{ifname}",
-	    "format-wifi": "{icon} {essid} ({signalStrength}%)",
-	    "format-ethernet": "󰈀 {ifname}",
-	    "format-disconnected": "󰖪 Нет подключения",
-	    "format-icons": ["󰤢", "󰤥"],
-	    "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
-	    "tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
-	    "tooltip-format-ethernet": "{ipaddr}/{cidr}",
-	    "tooltip-format-disconnected": "Сеть отключена",
-	    "on-click": "nm-connection-editor"
+		"interval": 5,
+		"format": "{ifname}",
+		"format-wifi": "{icon} {essid} ({signalStrength}%)",
+		"format-ethernet": "󰈀 {ifname}",
+		"format-disconnected": "󰖪 Нет подключения",
+		"format-icons": [
+			"󰤢",
+			"󰤥"
+		],
+		"tooltip-format": "{ifname}: {ipaddr}/{cidr}",
+		"tooltip-format-wifi": "{essid} ({signalStrength}%) - {ipaddr}/{cidr}",
+		"tooltip-format-ethernet": "{ipaddr}/{cidr}",
+		"tooltip-format-disconnected": "Сеть отключена",
+		"on-click": "nm-connection-editor"
 	},
-
 	"bluetooth": {
-	    "format": " {status}",
-	    "format-disabled": "<span color='#6c7086'> Off</span>",
-	    "format-off": "<span color='#6c7086'> Off</span>",
-	    "format-connected": "<span color='#a6e3a1'> {device_alias}</span>",
-	    "format-connected-battery": "<span color='#a6e3a1'> {device_alias}</span> <span color='#89b4fa'>󰂃 {device_battery_percentage}%</span>",
-	    "format-disconnected": "<span color='#6c7086'></span>",
-	    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
-	    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
-	    "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-	    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
-	    "on-click": "kitty bluetui"
-	},	
-
+		"format": " {status}",
+		"format-disabled": "<span color='#6c7086'> Off</span>",
+		"format-off": "<span color='#6c7086'> Off</span>",
+		"format-connected": "<span color='#a6e3a1'> {device_alias}</span>",
+		"format-connected-battery": "<span color='#a6e3a1'> {device_alias}</span> <span color='#89b4fa'>󰂃 {device_battery_percentage}%</span>",
+		"format-disconnected": "<span color='#6c7086'></span>",
+		"tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+		"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+		"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+		"tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+		"on-click": "kitty bluetui"
+	},
 	"tray": {
-        "spacing": 10,
+		"spacing": 10,
 		"icon-size": 16,
 		"show-passive-items": false
-    },
+	},
 	"hyprland/language": {
-    	"format": "{}",
-	    "format-en": "EN",
-	    "format-ru": "RU"
+		"format": "{}",
+		"format-en": "EN",
+		"format-ru": "RU"
 	}
 }

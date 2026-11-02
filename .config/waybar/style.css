@@ -7,8 +7,9 @@
 }
 
 window#waybar {
-    background: #1e1e2e;
+    background: rgba(30, 30, 46, 0.60);
     color: #cdd6f4;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #workspaces button {
@@ -24,8 +25,8 @@ window#waybar {
 }
 
 #workspaces button:hover {
-    background: #11111b;
-    box-shadow: inherit;
+    background-color: rgba(49, 50, 68, 0.7);
+	box-shadow: inherit;
     text-shadow: inherit;
 }
 
@@ -36,13 +37,13 @@ window#waybar {
 #clock, #cpu, #memory, #disk, #pulseaudio, #custom-mic, #custom-webcam, #custom-screenrec, #custom-pass, #battery, #bluetooth, #network {
     padding: 0 12px;
     margin: 0 2px;
-    background: #313244;
+    background-color: rgba(49, 50, 68, 0.7);
     border-radius: 4px;
 }
 
 #tray {
     padding: 0 8px;
-    background: #313244;
+    background-color: rgba(49, 50, 68, 0.7);
     border-radius: 4px;
 }
 
@@ -50,7 +51,7 @@ window#waybar {
 #language {
     padding: 0 12px;
     margin: 0 2px;
-    background: #313244;
+    background-color: rgba(49, 50, 68, 0.7);
     border-radius: 4px;
     color: #89b4fa;
     font-weight: bold;
