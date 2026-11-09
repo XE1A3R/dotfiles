@@ -1,12 +1,25 @@
 # === ПРОФИЛИРОВАНИЕ (Раскомментируй эту строку, если хочешь найти скрытые тормоза) ===
 # zmodload zsh/zprof
 
+#http_proxy="http://10.10.10.7:7890"
+#https_proxy="http://10.10.10.7:7890"
+#ALL_PROXY="socks5://10.10.10.7:7890"
+#NO_PROXY="10.10.10.1,10.10.10.0/24,127.0.0.1,localhost,.local,.lan"
+#no_proxy="$NO_PROXY"
+
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    exec start-hyprland
+fi
+
+#set -o vi
+setopt AUTO_PUSHD
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export QT_STYLE_OVERRIDE=Fusion
 #export QSG_RHI_BACKEND=vulkan
 #export QT_QPA_PLATFORMTHEME=qt6ct
 export EDITOR=nvim
+export VISUAL=nvim
 export GPG_TTY=$(tty)
 export ZSH_COMPDUMP="/tmp/.zcompdump-$HOST"
 

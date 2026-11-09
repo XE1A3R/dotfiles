@@ -24,7 +24,20 @@ opt.updatetime = 300
 opt.timeoutlen = 300
 
 opt.cursorline = true
-opt.wrap = false
+opt.wrap = true
+opt.linebreak = true
+opt.breakindent = true
+opt.showbreak = "↳ "
+opt.colorcolumn = "100"
+opt.textwidth = 100
+opt.formatoptions = opt.formatoptions + {
+    t = true,   -- Переносить текст при наборе И при gq по textwidth
+    c = true,   -- Форматировать комментарии по textwidth
+    q = true,   -- Разрешить форматирование комментариев через gq
+    j = true,   -- Убирать leader комментария при склейке строк
+    n = true,   -- Распознавать нумерованные списки
+}
+
 opt.showmode = false
 
 opt.list = true

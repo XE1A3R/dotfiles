@@ -17,6 +17,7 @@
 hl.env("WLR_DRM_DEVICES", "/dev/dri/card1")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 hl.env("GBM_BACKEND", "nvidia-drm")
+hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
 hl.env("NVD_BACKEND", "direct")
 --hl.env("WLR_DRM_DEVICES", "/dev/dri/card1:/dev/dri/card1")
@@ -30,19 +31,25 @@ hl.monitor({
 
 hl.monitor({
     output   = "DP-4",
-    mode     = "2560x1440@165",
+    mode     = "highrr",
     position = "0x0",
-    scale    = 1,
-	vrr = 0,
+	reserved_area = 5,
+	bitdepth = 10,
+    cm = "dcip3",
+--    sdrbrightness = 5.0,
+--    sdrsaturation = 1.25,
 })
 
 hl.monitor({
     output    = "DP-5",
     mode      = "2560x1440@165",
     position  = "3000x0",
-    scale     = 1,
     transform = 3,
-	vrr = 0,
+	reserved_area = 5,
+	bitdepth = 10,
+    cm = "dcip3",
+--    sdrbrightness = 5.0,
+--    sdrsaturation = 1.25,
 })
 
 ---------------------
@@ -76,7 +83,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hypridle")
     hl.exec_cmd("mako")
     hl.exec_cmd("swayosd-server")
-    hl.exec_cmd("hyprpaper")
+	hl.exec_cmd("hyprpaper")
     hl.exec_cmd("sleep 1 && /home/sasha/.config/hypr/change-wallpaper.sh")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 end)
@@ -255,6 +262,7 @@ hl.config({
 
 hl.config({
     misc = {
+		vrr = 0,
         force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
         disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background. :(
     },
