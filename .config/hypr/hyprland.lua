@@ -23,10 +23,11 @@ hl.env("NVD_BACKEND", "direct")
 --hl.env("WLR_DRM_DEVICES", "/dev/dri/card1:/dev/dri/card1")
 
 hl.monitor({
-    output   = "eDP0",
+    output   = "eDP-1",
     mode     = "preferred",
     position = "auto",
-    scale    = 2,
+    scale    = 1,
+    cm = "auto",
 })
 
 hl.monitor({
