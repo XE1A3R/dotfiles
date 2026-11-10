@@ -60,7 +60,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal    = "kitty"
 local menu        = "wofi --show drun"
-local browser     = "firefox"
+local browser     = "librewolf"
 
 -------------------
 ---- AUTOSTART ----
@@ -85,7 +85,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("mako")
     hl.exec_cmd("swayosd-server")
 	hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("sleep 1 && /home/sasha/.config/hypr/change-wallpaper.sh")
+    hl.exec_cmd("sleep 1 && $HOME/.config/hypr/change-wallpaper.sh")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
 end)
 
