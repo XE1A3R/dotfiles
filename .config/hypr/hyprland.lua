@@ -46,7 +46,7 @@ hl.monitor({
 hl.monitor({
     output    = "DP-5",
     mode      = "2560x1440@165",
-    position  = "3000x0",
+    position  = "auto-center-left",
     transform = 3,
 	reserved_area = 5,
 	bitdepth = 10,
@@ -54,6 +54,7 @@ hl.monitor({
 --    sdrbrightness = 5.0,
 --    sdrsaturation = 1.25,
 })
+
 
 ---------------------
 ---- MY PROGRAMS ----
