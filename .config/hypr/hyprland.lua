@@ -61,8 +61,10 @@ hl.monitor({
 
 -- Set programs that you use
 local terminal    = "kitty"
-local menu        = "wofi --show drun"
+--local menu        = "wofi --show drun"
+local menu        = "fuzzel"
 local browser     = "librewolf"
+local FileManager = "kitty --class yazi-float yazi"
 
 -------------------
 ---- AUTOSTART ----
@@ -80,16 +82,15 @@ local browser     = "librewolf"
 -- end)
 
 hl.on("hyprland.start", function()
---	hl.exec_cmd("sleep 3 && hyprctl keyword monitor DP-4,2560x1440@165,0x0,1,vrr,1,min_refresh_rate,60")
---    hl.exec_cmd("sleep 3 && hyprctl keyword monitor DP-5,2560x1440@165,3000x0,1,transform,3,vrr,1,min_refresh_rate,60")
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("hypridle")
-    hl.exec_cmd("mako")
-	hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("sleep 1 && $HOME/.config/hypr/change-wallpaper.sh")
     hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("waybar &")
+    hl.exec_cmd("hypridle &")
+    hl.exec_cmd("mako &")
+    hl.exec_cmd("hyprpaper &")
+    hl.exec_cmd("fuzzel --daemon &")
+    hl.exec_cmd("cliphist service &")
+    hl.exec_cmd("sleep 1 && $HOME/.config/hypr/change-wallpaper.sh &")
 end)
-
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
@@ -330,11 +331,13 @@ hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + Q", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
-hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(FileManager))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region --raw | swappy -f -"))
 hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region -o ~/Pictures/screenshots"))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd('cliphist list | fuzzel -d -p "Clipboard: " | cliphist decode | wl-copy'))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
