@@ -91,7 +91,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper &")
     hl.exec_cmd("fuzzel --daemon &")
     hl.exec_cmd("cliphist service &")
-    hl.exec_cmd("sleep 10 && $HOME/.config/hypr/change-wallpaper.sh &")
+    hl.exec_cmd("sleep 5 && $HOME/.config/hypr/change-wallpaper.sh &")
 end)
 
 -------------------------------
