@@ -14,15 +14,17 @@
 ---- MONITORS ----
 ------------------
 ---
-hl.env("WLR_DRM_DEVICES", "/dev/dri/card1")
+--hl.env("WLR_DRM_DEVICES", "/dev/dri/card1")
+hl.env("WLR_DRM_DEVICES", "/dev/dri/card0:/dev/dri/card1")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("GBM_BACKEND", "nvidia-drm")
 hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
+--hl.env("LIBVA_DRIVER_NAME", "iHD")
+--hl.env("LIBVA_DRIVERS_PATH", "/usr/lib/dri")
+hl.env("WLR_NO_HARDWARE_CURSORS", "1")
 hl.env("NVD_BACKEND", "direct")
-hl.env("LIBVA_DRIVER_NAME", "iHD")
-hl.env("LIBVA_DRIVERS_PATH", "/usr/lib/dri")
---hl.env("WLR_DRM_DEVICES", "/dev/dri/card1:/dev/dri/card1")
 
 hl.monitor({
     output   = "eDP-1",
@@ -34,7 +36,7 @@ hl.monitor({
 
 hl.monitor({
     output   = "DP-4",
-    mode     = "highrr",
+    mode      = "2560x1440@165",
     position = "0x0",
 	reserved_area = 5,
 	bitdepth = 10,
@@ -62,7 +64,6 @@ hl.monitor({
 
 -- Set programs that you use
 local terminal    = "kitty"
---local menu        = "wofi --show drun"
 local menu        = "fuzzel"
 local browser     = "librewolf"
 local FileManager = "kitty --class yazi-float yazi"
@@ -90,7 +91,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper &")
     hl.exec_cmd("fuzzel --daemon &")
     hl.exec_cmd("cliphist service &")
-    hl.exec_cmd("sleep 1 && $HOME/.config/hypr/change-wallpaper.sh &")
+    hl.exec_cmd("sleep 10 && $HOME/.config/hypr/change-wallpaper.sh &")
 end)
 
 -------------------------------

@@ -7,9 +7,9 @@
 #NO_PROXY="10.10.10.1,10.10.10.0/24,127.0.0.1,localhost,.local,.lan"
 #no_proxy="$NO_PROXY"
 
-if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-    exec start-hyprland
-fi
+#if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+#    exec start-hyprland
+#fi
 
 #set -o vi
 setopt AUTO_PUSHD

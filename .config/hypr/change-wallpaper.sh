@@ -1,10 +1,10 @@
 #!/bin/bash
 
 WALLPAPER_DIR="$HOME/Pictures/wallpapers/"
-INTERVAL=600  # если нужна периодичность, можно оставить цикл; пока просто однократно
+INTERVAL=300  # если нужна периодичность, можно оставить цикл; пока просто однократно
 
 # Ждём, пока hyprpaper запустится (максимум 5 секунд)
-TIMEOUT=5
+TIMEOUT=30
 while ! pgrep -x "hyprpaper" > /dev/null && [ $TIMEOUT -gt 0 ]; do
     sleep 0.5
     ((TIMEOUT--))
