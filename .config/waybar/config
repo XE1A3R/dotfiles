@@ -59,7 +59,7 @@
 		"interval": 60,
 		"locale": "en_US.UTF-8",
 		"calendar": {
-			"mode"             : "year",
+			"mode"             : "month",
 			"mode-mon-col"     : 3,
 			"weeks-pos"        : "right",
 			"first-day-of-week": 1,
