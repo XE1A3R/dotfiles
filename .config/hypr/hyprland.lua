@@ -14,15 +14,14 @@
 ---- MONITORS ----
 ------------------
 ---
---hl.env("WLR_DRM_DEVICES", "/dev/dri/card1")
 hl.env("WLR_DRM_DEVICES", "/dev/dri/card0:/dev/dri/card1")
 hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
 hl.env("XDG_SESSION_TYPE", "wayland")
 hl.env("GBM_BACKEND", "nvidia-drm")
 hl.env("MOZ_ENABLE_WAYLAND", "1")
 hl.env("LIBVA_DRIVER_NAME", "nvidia")
---hl.env("LIBVA_DRIVER_NAME", "iHD")
---hl.env("LIBVA_DRIVERS_PATH", "/usr/lib/dri")
+hl.env("LIBVA_DRIVER_NAME", "iHD")
+hl.env("LIBVA_DRIVERS_PATH", "/usr/lib/dri")
 hl.env("WLR_NO_HARDWARE_CURSORS", "1")
 hl.env("NVD_BACKEND", "direct")
 
@@ -35,7 +34,7 @@ hl.monitor({
 })
 
 hl.monitor({
-    output   = "DP-4",
+    output   = "DP-5",
     mode      = "2560x1440@165",
     position = "0x0",
 	reserved_area = 5,
@@ -46,9 +45,9 @@ hl.monitor({
 })
 
 hl.monitor({
-    output    = "DP-5",
+    output    = "DP-4",
     mode      = "2560x1440@165",
-    position  = "auto-center-left",
+    position  = "3000x0",
     transform = 3,
 	reserved_area = 5,
 	bitdepth = 10,
@@ -91,7 +90,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper &")
     hl.exec_cmd("fuzzel --daemon &")
     hl.exec_cmd("cliphist service &")
-    hl.exec_cmd("sleep 5 && $HOME/.config/hypr/change-wallpaper.sh &")
+    hl.exec_cmd("sleep 3 && $HOME/.config/hypr/change-wallpaper.sh &")
 end)
 
 -------------------------------
