@@ -24,6 +24,7 @@ hl.env("LIBVA_DRIVER_NAME", "iHD")
 hl.env("LIBVA_DRIVERS_PATH", "/usr/lib/dri")
 hl.env("WLR_NO_HARDWARE_CURSORS", "1")
 hl.env("NVD_BACKEND", "direct")
+hl.env("GRIMBLAST_EDITOR", "swappy -f")
 
 hl.monitor({
     output   = "eDP-1",
@@ -336,8 +337,8 @@ hl.bind(mainMod .. " + SHIFT + V", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + R", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(FileManager))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region --raw | swappy -f -"))
-hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("hyprshot -m region -o ~/Pictures/screenshots"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("grimblast --notify edit area"))
+hl.bind(mainMod .. " + S", hl.dsp.exec_cmd("grimblast --notify copysave area ~/Pictures/screenshots/$(date +%Y-%m-%d_%H-%M-%S).png"))
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd('cliphist list | fuzzel -d -p "Clipboard: " | cliphist decode | wl-copy'))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))    -- dwindle only
